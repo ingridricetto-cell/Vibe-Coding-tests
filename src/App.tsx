@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   FileText, CheckSquare, Mail, AlertTriangle, MessageSquare,
-  ChevronRight, ArrowLeft, Loader2, Copy, Check, LayoutTemplate
+  ChevronRight, ArrowLeft, Loader2, Copy, Check, LayoutTemplate,
+  RefreshCw
 } from 'lucide-react';
 import { marked } from 'marked';
 import { AppState, Language, ExtractedData } from './types';
@@ -340,14 +341,26 @@ export default function App() {
                 
                 <div className="mt-6 flex justify-between items-center">
                   <span className="text-sm text-slate-500">{t.step2Note}</span>
-                  <button 
-                    onClick={handleGenerateEmail}
-                    disabled={state.isLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {state.isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : t.step2Btn}
-                    {!state.isLoading && <ChevronRight className="w-5 h-5" />}
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {state.error && (
+                      <button 
+                        onClick={handleExtract}
+                        disabled={state.isLoading}
+                        className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors border border-red-200"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Tentar Novamente
+                      </button>
+                    )}
+                    <button 
+                      onClick={handleGenerateEmail}
+                      disabled={state.isLoading}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {state.isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : t.step2Btn}
+                      {!state.isLoading && <ChevronRight className="w-5 h-5" />}
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -401,7 +414,17 @@ export default function App() {
                     className="flex-1 w-full p-5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm mb-6"
                   />
                   
-                  <div className="flex justify-end">
+                  <div className="flex justify-end gap-3">
+                    {state.error && (
+                      <button 
+                        onClick={handleGenerateEmail}
+                        disabled={state.isLoading}
+                        className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors border border-red-200"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Tentar Novamente
+                      </button>
+                    )}
                     <button 
                       onClick={handleGenerateRisks}
                       disabled={state.isLoading}
@@ -436,7 +459,17 @@ export default function App() {
                   className="flex-1 w-full p-5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm mb-6"
                 />
                 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-3">
+                  {state.error && (
+                    <button 
+                      onClick={handleGenerateRisks}
+                      disabled={state.isLoading}
+                      className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors border border-red-200"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Tentar Novamente
+                    </button>
+                  )}
                   <button 
                     onClick={handleGenerateReport}
                     disabled={state.isLoading}
@@ -470,7 +503,17 @@ export default function App() {
                   className="flex-1 w-full p-5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm mb-6"
                 />
                 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-3">
+                  {state.error && (
+                    <button 
+                      onClick={handleGenerateReport}
+                      disabled={state.isLoading}
+                      className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors border border-red-200"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Tentar Novamente
+                    </button>
+                  )}
                   <button 
                     onClick={handleGenerateFinal}
                     disabled={state.isLoading}
@@ -510,6 +553,16 @@ export default function App() {
                 </div>
 
                 <div className="mt-8 flex gap-4">
+                  {state.error && (
+                    <button 
+                      onClick={handleGenerateFinal}
+                      disabled={state.isLoading}
+                      className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 font-medium flex items-center gap-2 transition-colors border border-red-200 rounded-lg"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Tentar Novamente
+                    </button>
+                  )}
                   <button 
                     onClick={() => updateState({ step: 5 })}
                     className="text-slate-600 hover:text-slate-800 px-4 py-2 font-medium transition-colors"
@@ -519,7 +572,7 @@ export default function App() {
                   <button 
                     onClick={() => updateState({ 
                       step: 1, transcript: '', email: '', risks: '', report: '', finalReport: '',
-                      extractedData: { stakeholders: '', terms: '', dates: '', nextSteps: '' }
+                      extractedData: { stakeholders: '', terms: '', dates: '', nextSteps: '' }, error: null
                     })}
                     className="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                   >
