@@ -1,0 +1,6 @@
+{
+  "name": "Weekly Summarizer",
+  "description": "Transform meeting transcripts into structured client emails and executive Slack reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
